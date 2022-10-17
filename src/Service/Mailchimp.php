@@ -69,14 +69,14 @@ class Mailchimp {
    * @return mixed
    */
   private function getMailchimpKey() {
-    return $this->mailchimSubscribeSettings->getMailchimpKey();
+    return (string) $this->mailchimSubscribeSettings->getMailchimpKey();
   }
 
   /**
    * @return mixed
    */
   private function getMailchimpListId() {
-    return $this->mailchimSubscribeSettings->getMailchimpListId();
+    return (string) $this->mailchimSubscribeSettings->getMailchimpListId();
   }
 
 }
