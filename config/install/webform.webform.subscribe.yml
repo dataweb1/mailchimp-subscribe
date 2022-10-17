@@ -1,4 +1,3 @@
-uuid: 4555c088-28e1-428c-9d7c-654e5e59504e
 langcode: nl
 status: open
 dependencies: {  }
@@ -28,7 +27,7 @@ elements: |-
       '#format_items': comma
     confirm_gdpr:
       '#type': checkbox
-      '#title': 'Ja, je mag m''n gegevens gebruiken om me op de hoogte te houden over Asbest bureau.'
+      '#title': 'Ja, je mag m''n gegevens gebruiken om me op de hoogte te houden over producten en diensten.'
       '#required': true
   actions:
     '#type': webform_actions

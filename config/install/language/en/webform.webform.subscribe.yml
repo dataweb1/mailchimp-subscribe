@@ -2,6 +2,6 @@ elements: |
   e_mail:
     '#unique_error': 'You are already subscribed to the newsletter.'
   confirm_gdpr:
-    '#title': 'Yes, you can use my details to keep me informed about Asbestos agency.'
+    '#title': 'Yes, you can use my details to keep me informed about products & services.'
   actions:
     '#submit__label': 'Sign up'
