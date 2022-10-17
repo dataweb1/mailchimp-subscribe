@@ -1,0 +1,10 @@
+services:
+  mailchimp:
+    class: Drupal\mailchimp_subscribe\Service\Mailchimp
+    arguments:
+      - '@mailchimp_subscribe.settings'
+
+  mailchimp_subscribe.settings:
+    class: Drupal\mailchimp_subscribe\Service\MailchimpSubscribeSettings
+    arguments:
+      - '@config.factory'

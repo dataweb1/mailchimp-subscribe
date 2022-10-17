@@ -1,0 +1,9 @@
+name: Subscribe in Mailchimp
+type: module
+description: Subscribe in Mailchimp.
+core_version_requirement: ^8 || ^9
+package: dw
+
+# Dependencies
+dependencies:
+  - drupal:webform

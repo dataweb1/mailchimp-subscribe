@@ -1,0 +1,6 @@
+mailchimp_subscribe.settings_form:
+  title: 'Mailchimp Subscribe settings'
+  route_name: mailchimp_subscribe.settings_form
+  description: 'Mailchimp Subscribe settings'
+  parent: system.admin_config_content
+  weight: 99

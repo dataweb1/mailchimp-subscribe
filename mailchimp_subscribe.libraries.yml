@@ -1,0 +1,4 @@
+mailchimp_subscribe:
+  css:
+    theme:
+      css/mailchimp_subscribe.css: {}

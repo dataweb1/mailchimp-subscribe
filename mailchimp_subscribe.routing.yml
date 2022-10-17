@@ -1,0 +1,9 @@
+mailchimp_subscribe.settings_form:
+  path: '/admin/config/mailchimp_subscribe/settings'
+  defaults:
+    _form: '\Drupal\mailchimp_subscribe\Form\MailchimpSubscribeSettingsForm'
+    _title: 'Mailchimp Subscribe Settings'
+  requirements:
+    _permission: 'administer mailchimp subscribe settings'
+  options:
+    _admin_route: 'TRUE'
