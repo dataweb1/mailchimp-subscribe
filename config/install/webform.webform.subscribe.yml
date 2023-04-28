@@ -41,6 +41,7 @@ elements: |-
       class:
         - btn
         - btn-secondary
+        - no-ui-button
 css: ''
 javascript: ''
 settings:
