@@ -1,7 +1,7 @@
 name: Subscribe in Mailchimp
 type: module
 description: Subscribe in Mailchimp.
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 package: dw
 
 # Dependencies
