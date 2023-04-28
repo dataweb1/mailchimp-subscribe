@@ -11,7 +11,7 @@
   ],
   "require": {
     "mailchimp/mailchimp": "^2.0",
-    "drupal/webform": "^6.1"
+    "drupal/webform": "^6.2"
   },
   "license": "GPL-2.0-or-later",
   "authors": [
