@@ -1,6 +1,9 @@
+uuid: dbfee92a-881f-4e5a-8084-4e9ba648bbb3
 langcode: nl
 status: open
 dependencies: {  }
+_core:
+  default_config_hash: uFVj3BVdAaknj6d_ToHMmjbkKuA86tcEpcLm7G7S5nM
 weight: 0
 open: null
 close: null
@@ -10,7 +13,7 @@ archive: false
 id: subscribe
 title: Subscribe
 description: ''
-category: ''
+categories: {  }
 elements: |-
   container:
     '#type': container
@@ -24,11 +27,32 @@ elements: |-
       '#title_display': invisible
       '#placeholder': E-mail
       '#required': true
+      '#wrapper_attributes':
+        class:
+          - ui-widget
+      '#attributes':
+        class:
+          - js-text-full
+          - text-full
+          - form-text
+          - form-control
       '#format_items': comma
+    tags:
+      '#type': checkboxes
+      '#title': 'interesse in'
+      '#options':
+        participant: 'Hou me op de hoogte over het aanbod van zoektochten'
+        explorer: 'Hou me op de hoogte over het uitstippelen van zoektochten als verkenner'
+        organizer: 'Hou me op de hoogte over het organiseren van eigen zoektochten'
+      '#required': true
     confirm_gdpr:
       '#type': checkbox
-      '#title': 'Ja, je mag m''n gegevens gebruiken om me op de hoogte te houden over producten en diensten.'
+      '#title': "Ja, je mag m'n gegevens gebruiken om me op de hoogte te houden via de nieuwsbrief"
       '#required': true
+  hidden_tags:
+    '#type': hidden
+    '#title': hidden_tags
+    '#default_value': quest
   actions:
     '#type': webform_actions
     '#title': Verzendknop(pen)
@@ -36,11 +60,14 @@ elements: |-
       class:
         - col-lg-4
         - mbr-section-btn
+        - text-align-start
+        - pt-2
     '#submit__label': Inschrijven
     '#submit__attributes':
       class:
-        - btn
-        - btn-secondary
+        - button
+        - button-secondary
+        - btn-md
         - no-ui-button
 css: ''
 javascript: ''
@@ -129,6 +156,8 @@ settings:
   wizard_toggle: true
   wizard_toggle_show_label: ''
   wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
   preview: 0
   preview_label: ''
   preview_title: ''
@@ -153,8 +182,10 @@ settings:
   confirmation_back_label: ''
   confirmation_back_attributes:
     class:
+      - button
       - btn
       - btn-secondary
+      - btn-md
   confirmation_exclude_query: false
   confirmation_exclude_token: false
   confirmation_update: false
