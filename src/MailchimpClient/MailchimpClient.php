@@ -1,14 +1,17 @@
 <?php
+
 namespace Drupal\mailchimp_subscribe\MailchimpClient;
 
+use Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException;
 use Psr\Http\Message\ResponseInterface;
 
-class MailchimpClient
-{
+/**
+ *
+ */
+class MailchimpClient {
   public const STATUS_ARCHIVED = 'archived';
   public const STATUS_PENDING = 'pending';
   public const STATUS_SUBSCRIBED = 'subscribed';
@@ -18,10 +21,9 @@ class MailchimpClient
   protected string $apiKey;
   protected string $apiEndpoint = 'https://%dc%.api.mailchimp.com/3.0/';
   protected array $headers = [];
-  protected ?object $lastError = null;
+  protected ?object $lastError = NULL;
 
-  public function __construct($apiKey)
-  {
+  public function __construct($apiKey) {
     $this->apiKey = $apiKey;
 
     [, $dc] = explode('-', $this->apiKey);
@@ -39,8 +41,10 @@ class MailchimpClient
     ]);
   }
 
-  public function call($type = 'get', $uri = '', $args = [], $timeout = 10): ?ResponseInterface
-  {
+  /**
+   *
+   */
+  public function call($type = 'get', $uri = '', $args = [], $timeout = 10): ?ResponseInterface {
     $args['apikey'] = $this->apiKey;
 
     try {
@@ -87,57 +91,72 @@ class MailchimpClient
           break;
       }
 
-      $this->lastError = null;
+      $this->lastError = NULL;
 
       return $response;
-    } catch (RequestException $e) {
+    }
+    catch (RequestException $e) {
       $response = $e->getResponse();
 
-      if (null === $response) {
+      if (NULL === $response) {
         throw $e;
       }
 
       try {
-        $this->lastError = json_decode((string) $response->getBody(), false, 512, \JSON_THROW_ON_ERROR);
-      } catch (\JsonException $e) {
+        $this->lastError = json_decode((string) $response->getBody(), FALSE, 512, \JSON_THROW_ON_ERROR);
+      }
+      catch (\JsonException $e) {
         $this->lastError = $e;
       }
 
       return $response;
-    } catch (\JsonException|GuzzleException $e) {
+    }
+    catch (\JsonException | GuzzleException $e) {
       $this->lastError = $e;
     }
 
-    return null;
+    return NULL;
   }
 
-  public function get($uri = '', $args = [], $timeout = 10): ?ResponseInterface
-  {
+  /**
+   *
+   */
+  public function get($uri = '', $args = [], $timeout = 10): ?ResponseInterface {
     return $this->call('get', $uri, $args, $timeout);
   }
 
-  public function post($uri = '', $args = [], $timeout = 10): ?ResponseInterface
-  {
+  /**
+   *
+   */
+  public function post($uri = '', $args = [], $timeout = 10): ?ResponseInterface {
     return $this->call('post', $uri, $args, $timeout);
   }
 
-  public function patch($uri = '', $args = [], $timeout = 10): ?ResponseInterface
-  {
+  /**
+   *
+   */
+  public function patch($uri = '', $args = [], $timeout = 10): ?ResponseInterface {
     return $this->call('patch', $uri, $args, $timeout);
   }
 
-  public function put($uri = '', $args = [], $timeout = 10): ?ResponseInterface
-  {
+  /**
+   *
+   */
+  public function put($uri = '', $args = [], $timeout = 10): ?ResponseInterface {
     return $this->call('put', $uri, $args, $timeout);
   }
 
-  public function delete($uri = '', $args = [], $timeout = 10): ?ResponseInterface
-  {
+  /**
+   *
+   */
+  public function delete($uri = '', $args = [], $timeout = 10): ?ResponseInterface {
     return $this->call('delete', $uri, $args, $timeout);
   }
 
-  public function validateApiKey(): bool
-  {
+  /**
+   *
+   */
+  public function validateApiKey(): bool {
     $response = $this->get();
 
     return $response && 200 === $response->getStatusCode();
@@ -146,33 +165,33 @@ class MailchimpClient
   /**
    * @throws \JsonException
    */
-  public function getAccountDetails()
-  {
+  public function getAccountDetails() {
     $response = $this->get('');
 
-    return $response ? json_decode((string) $response->getBody(), false, 512, \JSON_THROW_ON_ERROR) : null;
+    return $response ? json_decode((string) $response->getBody(), FALSE, 512, \JSON_THROW_ON_ERROR) : NULL;
   }
 
-  public function isSubscribed($listId, $email): bool
-  {
+  /**
+   *
+   */
+  public function isSubscribed($listId, $email): bool {
     return self::STATUS_SUBSCRIBED === $this->getSubscriberStatus($listId, $email);
   }
 
   /**
-   * @throws ApiException
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    * @throws \JsonException
    */
-  public function getSubscriberStatus($listId, $email)
-  {
+  public function getSubscriberStatus($listId, $email) {
     $endpoint = sprintf('lists/%s/members/%s', $listId, $this->getSubscriberHash($email));
 
     $response = $this->get($endpoint);
 
-    if (null === $response) {
+    if (NULL === $response) {
       throw new ApiException('Could not connect to API. Check your credentials.');
     }
 
-    $body = json_decode((string) $response->getBody(), false, 512, \JSON_THROW_ON_ERROR);
+    $body = json_decode((string) $response->getBody(), FALSE, 512, \JSON_THROW_ON_ERROR);
 
     return $body->status;
   }
@@ -191,7 +210,7 @@ class MailchimpClient
    * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    * @throws \JsonException
    */
-  public function subscribeToList($listId, $email, string $lng = "", array $mergeVars = [], array $tags = [], array $interests = [], bool $doubleOptin = TRUE)  {
+  public function subscribeToList($listId, $email, string $lng = "", array $mergeVars = [], array $tags = [], array $interests = [], bool $doubleOptin = TRUE) {
     $endpoint = sprintf('lists/%s/members', $listId);
 
     $current_status = $this->getSubscriberStatus($listId, $email);
@@ -206,23 +225,23 @@ class MailchimpClient
     /*
     // If attempt to subscribe change current status to pending if current status is archived or unsubscribed.
     if ($if_new_status == self::STATUS_SUBSCRIBED) {
-      if ($current_status == 404 || $current_status == self::STATUS_ARCHIVED || $current_status == self::STATUS_UNSUBSCRIBED) {
-        $update_status = self::STATUS_PENDING;
-      }
+    if ($current_status == 404 || $current_status == self::STATUS_ARCHIVED || $current_status == self::STATUS_UNSUBSCRIBED) {
+    $update_status = self::STATUS_PENDING;
+    }
     }
 
     // If attempt to subscribe change new status to pending if double opt-in.
     if ($if_new_status == self::STATUS_SUBSCRIBED) {
-      $if_new_status = $doubleOptin ? self::STATUS_PENDING : self::STATUS_SUBSCRIBED;
+    $if_new_status = $doubleOptin ? self::STATUS_PENDING : self::STATUS_SUBSCRIBED;
     }
 
 
     // Force pending status to unsubscribe status if adding an already (invisible) existing pending subscription.
     if ($forceStatus != '') {
-      $update_status = $forceStatus;
-      $if_new_status = $forceStatus;
+    $update_status = $forceStatus;
+    $if_new_status = $forceStatus;
     }
-    */
+     */
 
     // Prepare the data to be sent with the request.
     $requestData = [
@@ -252,21 +271,20 @@ class MailchimpClient
       return $status;
     }
 
-    return false;
+    return FALSE;
   }
 
   /**
-   * @throws ApiException
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    */
-  public function unsubscribeFromList($listId, $email): bool
-  {
+  public function unsubscribeFromList($listId, $email): bool {
     $endpoint = sprintf('lists/%s/members/%s', $listId, $this->getSubscriberHash($email));
 
     $response = $this->patch($endpoint, [
       'status' => 'unsubscribed',
     ]);
 
-    if (null === $response) {
+    if (NULL === $response) {
       throw new ApiException('Could not connect to API. Check your credentials.');
     }
 
@@ -274,15 +292,14 @@ class MailchimpClient
   }
 
   /**
-   * @throws ApiException
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    */
-  public function removeFromList($listId, $email): bool
-  {
-    $endpoint = sprintf('lists/%s/members/%s', $listId, $this->getSubscriberHash($email));
+  public function updateListMemberTags($listId, $email, $tags): bool {
+    $endpoint = sprintf('lists/%s/members/%s/tags', $listId, $this->getSubscriberHash($email));
 
-    $response = $this->delete($endpoint);
+    $response = $this->post($endpoint, ['tags' => $tags]);
 
-    if (null === $response) {
+    if (NULL === $response) {
       throw new ApiException('Could not connect to API. Check your credentials.');
     }
 
@@ -290,16 +307,30 @@ class MailchimpClient
   }
 
   /**
-   * @throws ApiException
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
+   */
+  public function removeFromList($listId, $email): bool {
+    $endpoint = sprintf('lists/%s/members/%s', $listId, $this->getSubscriberHash($email));
+
+    $response = $this->delete($endpoint);
+
+    if (NULL === $response) {
+      throw new ApiException('Could not connect to API. Check your credentials.');
+    }
+
+    return 204 === $response->getStatusCode();
+  }
+
+  /**
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    * @throws \JsonException
    */
-  public function getListFields($listId, $offset = 0, $limit = 10)
-  {
+  public function getListFields($listId, $offset = 0, $limit = 10) {
     $endpoint = sprintf('lists/%s/merge-fields', $listId);
 
     $response = $this->get($endpoint, ['offset' => $offset, 'limit' => $limit]);
 
-    if (null === $response) {
+    if (NULL === $response) {
       throw new ApiException('Could not connect to API. Check your credentials.');
     }
 
@@ -307,20 +338,19 @@ class MailchimpClient
       throw new ApiException('Could not fetch merge-fields from API.');
     }
 
-    return json_decode((string) $response->getBody(), false, 512, \JSON_THROW_ON_ERROR);
+    return json_decode((string) $response->getBody(), FALSE, 512, \JSON_THROW_ON_ERROR);
   }
 
   /**
-   * @throws ApiException
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    * @throws \JsonException
    */
-  public function getListGroupCategories($listId, $offset = 0, $limit = 10)
-  {
+  public function getListGroupCategories($listId, $offset = 0, $limit = 10) {
     $endpoint = sprintf('lists/%s/interest-categories', $listId);
 
     $response = $this->get($endpoint, ['offset' => $offset, 'limit' => $limit]);
 
-    if (null === $response) {
+    if (NULL === $response) {
       throw new ApiException('Could not connect to API. Check your credentials.');
     }
 
@@ -328,20 +358,19 @@ class MailchimpClient
       throw new ApiException('Could not fetch interest-categories from API.');
     }
 
-    return json_decode((string) $response->getBody(), false, 512, \JSON_THROW_ON_ERROR);
+    return json_decode((string) $response->getBody(), FALSE, 512, \JSON_THROW_ON_ERROR);
   }
 
   /**
-   * @throws ApiException
+   * @throws \Drupal\mailchimp_subscribe\MailchimpClient\Exception\ApiException
    * @throws \JsonException
    */
-  public function getListGroup($listId, $groupId, $offset = 0, $limit = 10)
-  {
+  public function getListGroup($listId, $groupId, $offset = 0, $limit = 10) {
     $endpoint = sprintf('lists/%s/interest-categories/%s/interests', $listId, $groupId);
 
     $response = $this->get($endpoint, ['offset' => $offset, 'limit' => $limit]);
 
-    if (null === $response) {
+    if (NULL === $response) {
       throw new ApiException('Could not connect to API. Check your credentials.');
     }
 
@@ -349,16 +378,21 @@ class MailchimpClient
       throw new ApiException('Could not fetch interest group from API.');
     }
 
-    return json_decode((string) $response->getBody(), false, 512, \JSON_THROW_ON_ERROR);
+    return json_decode((string) $response->getBody(), FALSE, 512, \JSON_THROW_ON_ERROR);
   }
 
-  public function getSubscriberHash($email): string
-  {
+  /**
+   *
+   */
+  public function getSubscriberHash($email): string {
     return md5(strtolower($email));
   }
 
-  public function getLastError(): ?object
-  {
+  /**
+   *
+   */
+  public function getLastError(): ?object {
     return $this->lastError;
   }
+
 }
