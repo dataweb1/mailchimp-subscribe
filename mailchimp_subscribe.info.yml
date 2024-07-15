@@ -7,3 +7,6 @@ package: dw
 # Dependencies
 dependencies:
   - drupal:webform
+
+interface translation project: mailchimp_subscribe
+interface translation server pattern: modules/contrib/mailchimp_subscribe/translations/%project.%language.po

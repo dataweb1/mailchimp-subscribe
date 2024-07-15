@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Mailchimp Subscribe\n"
+"POT-Creation-Date: 2020-08-14 12:34+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Français\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+msgid "Your subscription to the newsletter has been successfully received."
+msgstr "Votre inscription à la newsletter a été reçue avec succès."
+
+msgid "Your subscription to the newsletter has been successfully received. You will receive another email to confirm."
+msgstr "Votre inscription à la newsletter a été reçue avec succès. Vous recevrez un autre e-mail pour confirmer."
+
+msgid "Something went wrong while subscribing. Please try again later.'"
+msgstr "Une erreur s'est produite lors de l'abonnement. Veuillez réessayer plus tard."
