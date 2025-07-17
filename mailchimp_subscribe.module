@@ -34,7 +34,7 @@ function _subscribe_after_submit(array $form, FormStateInterface $form_state) {
   $email = $form_state->getValue('e_mail');
   if ($email != '') {
 
-    $visible_tags = $form_state->getValue('tags');
+    $visible_tags = $form_state->getValue('tags') ?? [];
     $hidden_tags = explode(',', $form_state->getValue('hidden_tags'));
 
     $tags = array_merge($visible_tags, $hidden_tags);
