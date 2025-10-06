@@ -61,8 +61,14 @@ function _subscribe_after_submit(array $form, FormStateInterface $form_state) {
       switch ($result) {
         // Not yet existing.
         case 'pending';
-          \Drupal::messenger()
-            ->addMessage(t('Your subscription to the newsletter has been successfully received. You will receive another email to confirm.'));
+          if ($double_optin) {
+            \Drupal::messenger()
+              ->addMessage(t('Your subscription to the newsletter has been successfully received. You will receive another email to confirm.'));
+          }
+          else {
+            \Drupal::messenger()
+              ->addMessage(t('Your subscription to the newsletter has been successfully received.'));
+          }
           break;
         // Existing and confirmed earlier.
         case 'subscribed':
