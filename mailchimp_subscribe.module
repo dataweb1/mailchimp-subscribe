@@ -37,14 +37,24 @@ function _subscribe_after_submit(array $form, FormStateInterface $form_state) {
     $visible_tags = $form_state->getValue('tags') ?? [];
     $hidden_tags = explode(',', $form_state->getValue('hidden_tags'));
     $double_optin = $form_state->getValue('double_optin') ?? TRUE;
+    $first_name = $form_state->getValue('first_name') ?? '';
+    $last_name = $form_state->getValue('last_name') ?? '';
 
     $tags = array_merge($visible_tags, $hidden_tags);
+
+    $merge_fields =         [
+      'FNAME' => $first_name,
+      'LNAME' => $last_name,
+    ];
 
     /** @var \Drupal\mailchimp_subscribe\Service\Mailchimp $mailchimp */
     $mailchimp = \Drupal::service('mailchimp');
     if ($result = $mailchimp->subscribe(
       $email,
       \Drupal::languageManager()->getCurrentLanguage()->getId(),
+      $merge_fields,
+      [],
+      [],
       $double_optin,
     )) {
       $mailchimp->updateTags($email, $tags);
