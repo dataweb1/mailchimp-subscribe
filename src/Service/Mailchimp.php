@@ -70,7 +70,7 @@ class Mailchimp {
    *
    * @return bool
    */
-  public function subscribe($email, string $lng = '', array $merge_fields = [], array $tags = [], array $interests = []): bool {
+  public function subscribe($email, string $lng = '', array $merge_fields = [], array $tags = [], array $interests = [], $double_optin = TRUE): bool {
     $mailchimpClient = new MailchimpClient($this->getMailchimpKey());
     try {
       return $mailchimpClient->subscribeToList(
@@ -80,7 +80,7 @@ class Mailchimp {
         $merge_fields,
         $tags,
         $interests,
-        TRUE
+        $double_optin
       );
     }
     catch (\Exception $e) {
